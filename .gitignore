@@ -1,0 +1,41 @@
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+!.vscode/*.code-snippets
+
+# Local History for Visual Studio Code
+.history/
+
+# Built Visual Studio Code Extensions
+*.vsix
+
+
+# Build directories
+dist/
+build/
+out/
+
+# Logs
+*.log
+
+# Operating System Files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDE-specific Files
+.vscode/
+.idea/
+*.code-workspace
+
+# Temp files
+*.tmp
+*.temp
+
+# Sensitive files
+*.env
+*.key
+*.pem
+*.crt
