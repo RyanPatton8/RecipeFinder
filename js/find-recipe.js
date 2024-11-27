@@ -1,7 +1,8 @@
 // Necessary variables for retrieving info from API
 const key = "1";
 let searchType = "s";
-const baseURL = `https://www.themealdb.com/api/json/v1/${key}/search.php?`
+const baseURL = `https://www.themealdb.com/api/json/v1/${key}/`
+//               https://www.themealdb.com/api/json/v1/1/list.php?c=list
 
 // A text field to write your query and two search buttons that search differently
 const searchBar = document.querySelector("#search-txt");
@@ -16,46 +17,56 @@ const searchCharBtn = document.querySelector("#search-first-letter");
 // };
 searchBtn.onclick = function (event){
     event.preventDefault();
-    applyFilters();
+    fetchResults();
 };
 searchCharBtn.onclick = function (event){
     event.preventDefault();
     searchType = "f"
     fetchResults();
-};;
+};
 
-function fetchResults() {
-    // Use preventDefault() to stop the form submitting
-    // Assemble the full URL, checking the search type as to only grab one letter if thats what their after
-    url = `${baseURL}${searchType}=${searchType === "s" ? searchBar.value : searchBar.value.charAt(0)}`;
-    // Use fetch() to pass the URL that we built as a request to the API service, then pass the JSON to the displayResults() function
-    fetch(url)
+function searchBarPromise() {
+    url = `${baseURL}search.php?${searchType}=${searchType === "s" ? searchBar.value : searchBar.value.charAt(0)}`;
+    return fetch(url)
     .then(result => {return result.json()})
-    .then(json => {applyFilters(json);})
+    .then(json => {return json.meals;})
     .catch(error => {
         console.log("Error: " + error);
     });
 };
 
-// function applyFilters(json){
-//     // Will hold all active checkboxes
-//     let activeCheckBoxes = document.querySelectorAll("input[type='checkbox']:checked");
-//     let filteredResults = [];
-//     if(activeCheckBoxes.length > 0){
-//         for(checkBox of activeCheckBoxes){
-//             url = `${baseURL}c=${checkBox.name}`
-//             fetch(url)
-//             .then(result => {return result.json()})
-//             .then(json => {filteredResults.push(json);})
-//             .catch(error => {
-//                 console.log("Error: " + error);
-//             });
-//         }
-//     }
-    
-//     displayResults(filteredResults);
-// }
+async function collectAllFilteredPromise(){
+    let activeCheckBoxes = document.querySelectorAll("input[type='checkbox']:checked");
+    let promiseList = [];
+    if(activeCheckBoxes.length > 0){
+        for(checkBox of activeCheckBoxes){
+            url = `${baseURL}filter.php?c=${checkBox.name}`
+            let promise = fetch(url)
+                .then(result => {return result.json()})
+                .then(json => {return json.meals;})
+                .catch(error => {
+                    console.log("Error: " + error);
+                });
+            promiseList.push(promise);
+        }
+
+        const results = await Promise.all(promiseList);
+        const allMeals = results.flat();
+        return new Set(allMeals);
+    }
+}
+
+async function fetchResults(){
+    let searchBarResults = await searchBarPromise();
+    let filterResults = await collectAllFilteredPromise();
+    console.log(searchBarResults);
+}
 
 function displayResults(json){
     console.log(json);
+}
+
+function applyFilters(json){
+    // Will hold all active checkboxes
+    
 }
