@@ -1,6 +1,6 @@
 // Necessary variables for retrieving info from API
 const key = "1";
-let searchType = "s";
+let searchType = "filter.php?i";
 const baseURL = `https://www.themealdb.com/api/json/v1/${key}/`
 
 // A text field to write your query and two search buttons that search differently
@@ -122,3 +122,5 @@ function displayResults(results){
         }
     }
 }
+
+fetchResults();
