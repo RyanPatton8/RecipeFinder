@@ -35,8 +35,29 @@ form{
 }
 .row{
     width: 150px;
+    padding: 0 20px;
 }
 .check-holder{
     display: flex;
     justify-content: space-between;
+}
+#meals{
+    display: flex;
+    flex-wrap: wrap;
+    width: 90%;
+    justify-content: flex-start;
+    border: 2px solid black;
+}
+#meals p{
+    width: 100%;
+    text-align: center;
+}
+.meal-card{
+    height: 200px;
+    width: 150px;
+    padding: 15px;
+}
+.meal-card img{
+    width: 100%;
+    height: auto;
 }
