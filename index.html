@@ -5,13 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <script src="js/find-recipe.js" defer></script>
+    <link rel="stylesheet" href="./css/styles.css">
 </head>
 <body>
     <form>
         <div id="search-bar">
-            <input type="text" id="search-txt">
-            <button id="search-full">Search</button>
-            <button id="search-first-letter">Search by Ingredient</button>
+            <input type="text" id="search-txt" placeholder="Search...">
+            <div class="search-bar-buttons">
+                <button id="search-full">Search</button>
+                <button id="search-ingredient">Search by Ingredient</button>
+                <button id="search-first-letter">Search by First Letter</button>
+            </div>
         </div>
         <div id="filters">
             <div class="row">

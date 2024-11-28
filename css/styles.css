@@ -1,0 +1,42 @@
+html{
+    margin: 0;
+    padding: 0;
+}
+body{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+h1,h2,h3,h4,h5,h6{
+    font-size: 1.5em;
+}
+form{
+    border: 2px solid black;
+    width: 50%;
+}
+#search-bar{
+    display: flex;
+    flex-direction: column;
+}
+.search-bar-buttons{
+    display: flex;
+    justify-content: space-between;
+}
+.search-bar-buttons button{
+    width: 50%;
+}
+#search-txt{
+    height: 30px;
+}
+#filters{
+    display: flex;
+    justify-content: space-evenly;
+}
+.row{
+    width: 150px;
+}
+.check-holder{
+    display: flex;
+    justify-content: space-between;
+}

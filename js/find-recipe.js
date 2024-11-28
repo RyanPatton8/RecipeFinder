@@ -7,24 +7,28 @@ const baseURL = `https://www.themealdb.com/api/json/v1/${key}/`
 const searchBar = document.querySelector("#search-txt");
 const searchBtn = document.querySelector("#search-full");
 const searchCharBtn = document.querySelector("#search-first-letter");
+const searchIngrBtn = document.querySelector("#search-ingredient");
 
 // Change the search type based on btn clicked and call fetch results
 searchBtn.onclick = function (event){
     event.preventDefault();
     searchType = "search.php?s";
-    fetchResults();
+    fetchResults(searchBar.value.trim());
 };
 searchCharBtn.onclick = function (event){
     event.preventDefault();
+    searchType = "search.php?f";
+    fetchResults(searchBar.value.trim().charAt(0));
+};
+searchIngrBtn.onclick = function (event){
+    event.preventDefault();
     searchType = "filter.php?i";
-    fetchResults();
+    fetchResults(searchBar.value.trim());
 };
 
-function searchBarPromise() {
-    if(searchType === "search.php?s"){
-        searchBar.value.trim().length > 1 ? searchType = "search.php?s" : searchType = "search.php?f";
-    }
-    url = `${baseURL}${searchType}=${searchBar.value.trim()}`;
+//This function returns a list of detailed meal objects checking to see if it is a first letter only search using a terinary operator
+function searchBarPromise(searchQuery) {
+    url = `${baseURL}${searchType}=${searchType === "search.php?f" ? searchBar.value.trim().charAt(0) : searchBar.value.trim()}`;
     return fetch(url)
     .then(result => {return result.json()})
     .then(json => {return json.meals;})
@@ -32,7 +36,15 @@ function searchBarPromise() {
         console.log("Error: " + error);
     });
 };
+/*
+    This function gets a list of all active checkboxes in the form and loops through each of them creating future promises that are stored
+    in a list.
 
+    Each individual promise returns all of the meals in its respective category.
+    
+    Afterwards it takes all those promises and gathers all the results from them and flattens them into a single list of meals
+    and then turns that list into a set of all of the meal ids ensuring easy look up in constant time without duplicates
+*/
 async function collectAllFilteredPromise(){
     let activeCheckBoxes = document.querySelectorAll("input[type='checkbox']:checked");
     let promiseList = [];
@@ -56,24 +68,29 @@ async function collectAllFilteredPromise(){
         return new Set();
     }
 }
-
+/*
+    After getting the detailed search results and the filtered meal id's we actually filter out any meals from our 
+    search that werent in the filtered meals list and then print the results
+*/
 async function fetchResults(){
     try{
         let searchBarResults = await searchBarPromise();
         let filterResults = await collectAllFilteredPromise(searchBarResults);
         let finalResults = searchBarResults.filter(meal => filterResults.has(meal.idMeal));
-        if(filterResults.size > 0 && searchBarResults.length > 0){
+        let wasFiltered = filterResults.size > 0;
+        let wasStrInputted = searchBarResults.length > 0;
+        let wasResults = finalResults.length > 0;
+        if(wasResults){
             console.log(finalResults);
         }
-        else if(filterResults.size > 0){
-            console.log(finalResults);
+        else if(wasStrInputted && wasFiltered){
+            console.log("Nothing of specified search in category");
         }
-        else if(searchBarResults.length > 0){
-            let finalResults = searchBarResults;
-            console.log(finalResults)
+        else if(wasStrInputted){
+            console.log(searchBarResults)
         }
-        else{
-            console.log("No Results Returned");
+        else if(wasFiltered){
+            console.log("Must Input Search")
         }
     }
     catch(error){
