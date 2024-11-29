@@ -6,37 +6,42 @@ const baseURL = `https://www.themealdb.com/api/json/v1/${key}/`
 // A text field to write your query and two search buttons that search differently
 const searchBar = document.querySelector("#search-txt");
 const searchBtn = document.querySelector("#search-full");
-const searchCharBtn = document.querySelector("#search-first-letter");
-const searchIngrBtn = document.querySelector("#search-ingredient");
-
 
 // Change the search type based on btn clicked and call fetch results
 searchBtn.onclick = function (event){
     event.preventDefault();
-    searchType = "search.php?s";
-    fetchResults();
-};
-searchCharBtn.onclick = function (event){
-    event.preventDefault();
-    searchType = "search.php?f";
-    fetchResults();
-};
-searchIngrBtn.onclick = function (event){
-    event.preventDefault();
-    searchType = "filter.php?i";
-    fetchResults();
+    fetchResults(false);
 };
 
-//This function returns a list of detailed meal objects checking to see if it is a first letter only search using a terinary operator
-function searchBarPromise() {
-    url = `${baseURL}${searchType}=${searchType === "search.php?f" ? searchBar.value.trim().charAt(0) : searchBar.value.trim()}`;
-    return fetch(url)
-    .then(result => {return result.json()})
-    .then(json => {return json.meals;})
-    .catch(error => {
-        console.log("Error: " + error);
-    });
-};
+//This function returns a list of detailed meal mealects
+async function searchBarPromise() {
+        let url = `${baseURL}search.php?s=${searchBar.value.trim()}`;
+        let standardSearch = fetch(url)
+        .then(result => {return result.json()})
+        .then(json => {return json.meals;})
+        .catch(error => {
+            console.log("Error: " + error);
+        });
+        url = `${baseURL}filter.php?i=${searchBar.value.trim()}`;
+        let ingredientSearch = fetch(url)
+        .then(result => {return result.json()})
+        .then(json => {return json.meals || [];})
+        .catch(error => {
+            console.log("Error: " + error);
+            return [];
+        });
+        const results = await Promise.all([standardSearch, ingredientSearch]);
+        /*
+            In the line below I am taking all results from the flattened list and turning them 
+            into key value pairs (the mealID and the meal mealect) using the .map function 
+            and storing them in a new Map to remove all duplicates effieciently
+
+            I am then storing all of that back into a list and returning it
+        */
+        return Array.from(
+            new Map(results.flat().map(meal => [meal.idMeal, meal])).values()
+        );
+}
 /*
     This function gets a list of all active checkboxes in the form and loops through each of them creating future promises that are stored
     in a list.
@@ -51,7 +56,7 @@ async function collectAllFilteredPromise(){
     let promiseList = [];
     if(activeCheckBoxes.length > 0){
         for(checkBox of activeCheckBoxes){
-            url = `${baseURL}filter.php?c=${checkBox.name}`
+            let url = `${baseURL}filter.php?c=${checkBox.name}`
             let promise = fetch(url)
                 .then(result => {return result.json()})
                 .then(json => {return json.meals;})
@@ -73,9 +78,9 @@ async function collectAllFilteredPromise(){
     After getting the detailed search results and the filtered meal id's we actually filter out any meals from our 
     search that werent in the filtered meals list and then print the results
 */
-async function fetchResults(){
+async function fetchResults(searchingByFirstChar = false){
     try{
-        let searchBarResults = await searchBarPromise();
+        let searchBarResults = await searchBarPromise(searchingByFirstChar);
         let filterResults = await collectAllFilteredPromise(searchBarResults);
         let finalResults = searchBarResults.filter(meal => filterResults.has(meal.idMeal));
         let wasFiltered = filterResults.size > 0;
@@ -109,15 +114,18 @@ function displayResults(results){
     if(typeof results === "string"){
         const paragraph = document.createElement("p");
         paragraph.textContent = "No results in category";
+        paragraph.setAttribute("id", "no-meals");
         resultSection.appendChild(paragraph);
     }
     else{
-        for(obj of results){
+        for(meal of results){
             resultSection.innerHTML += `
-            <div class = "meal-card">
-                <img src="${obj.strMealThumb}" alt="${obj.strMeal}">
-                <p>${obj.strMeal}</p>
-            </div>
+            <a href="meal.html?id=${meal.idMeal}">
+                <div class = "meal-card">
+                    <img src="${meal.strMealThumb}" alt="${meal.strMeal}">
+                    <p>${meal.strMeal}</p>
+                </div>
+            </a>
             `;
         }
     }

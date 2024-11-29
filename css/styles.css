@@ -36,23 +36,24 @@ h1,h2,h3,h4,h5,h6{
     font-size: 1.5em;
 }
 form{
-    border: 3px solid black;
+    border: 5px solid #0e0e0e;
+    border-radius: 10px;
     width: 50%;
-    margin-bottom: 30px;
+    margin: 30px 0;
 }
 #search-bar{
     display: flex;
     flex-direction: column;
 }
-.search-bar-buttons{
-    display: flex;
-    justify-content: space-between;
-}
-.search-bar-buttons button{
-    width: 50%;
-}
 #search-txt{
+    height: 50px;
+    font-size: 1.5rem;
+}
+#search-full{
     height: 30px;
+    color: #fefefe;
+    background-color: #474747;
+    font-size: 1rem;
 }
 #filters{
     display: flex;
@@ -72,10 +73,19 @@ form{
     grid-template-columns: auto auto auto auto auto;
     width: 90%;
 }
-#meals p{
+#meals #no-meals{
     grid-column: 3;
     width: 100%;
     text-align: center;
+    color: #fefefe;
+    background-color: #463420;
+    border: 3px solid #312517;
+    border-radius: 10px;
+    padding: 10px;
+    font-size: 2em;
+}
+#meals a{
+    text-decoration: none;
 }
 .meal-card{
     height: 345px;
@@ -83,8 +93,13 @@ form{
     padding: 5px;
     margin: 15px;
     background-color: #463420;
-    border: 4px solid #463420;
+    border: 4px solid #312517;
     border-radius: 10px;
+    transition: all .25s ease;
+}
+.meal-card:hover{
+    transform: scale(1.05);
+    cursor: pointer;
 }
 .meal-card img{
     width: 100%;
@@ -95,4 +110,5 @@ form{
     font-size: 20px;
     color: #fefefe;
     text-wrap: wrap;
+    text-align: center;
 }
