@@ -13,6 +13,9 @@ html{
     margin: 0;
     padding: 0;
     scroll-behavior: smooth;
+    font-family: "Varela Round", sans-serif;
+    font-weight: 400;
+    font-style: normal;
 }
 body{
     display: flex;
@@ -138,11 +141,13 @@ form{
 header{
     color: #fefefe;
     min-width: 20%;
+
     padding: 15px;
     background-color: #6e5334;
     border: 5px solid #312517;
     border-radius: 10px;
     text-align: center;
+    justify-items: center;
 }
 #country-origin{
     color: #fefefe;
@@ -153,15 +158,15 @@ header a{
     color: #fefefe;
     font-size: 1.2em;
     text-decoration: none;
-    border: 2px solid #fefefe;
+    border: 3px solid #fefefe;
     border-radius: 10px;
     padding: 5px;
     transition: all .2s linear;
 }
 header a:hover{
     background-color: #fefefe;
-    border: 5px solid #553a1b;
-    border-radius: 5px;
+    border: 3px solid #553a1b;
+    border-radius: 10px;
     color: #553a1b;
 }
 main{
@@ -188,6 +193,10 @@ main img{
 }
 #ingredients{
     font-size: 1.2rem;
+}
+#flex-holder{
+    display: flex;
+    justify-content: space-between;
 }
 #instructions{
     text-align: center;
