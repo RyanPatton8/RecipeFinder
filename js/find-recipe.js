@@ -15,32 +15,32 @@ searchBtn.onclick = function (event){
 
 //This function returns a list of detailed meal mealects
 async function searchBarPromise() {
-        let url = `${baseURL}search.php?s=${searchBar.value.trim()}`;
-        let standardSearch = fetch(url)
-        .then(result => {return result.json()})
-        .then(json => {return json.meals;})
-        .catch(error => {
-            console.log("Error: " + error);
-        });
-        url = `${baseURL}filter.php?i=${searchBar.value.trim()}`;
-        let ingredientSearch = fetch(url)
-        .then(result => {return result.json()})
-        .then(json => {return json.meals || [];})
-        .catch(error => {
-            console.log("Error: " + error);
-            return [];
-        });
-        const results = await Promise.all([standardSearch, ingredientSearch]);
-        /*
-            In the line below I am taking all results from the flattened list and turning them 
-            into key value pairs (the mealID and the meal mealect) using the .map function 
-            and storing them in a new Map to remove all duplicates effieciently
+    let url = `${baseURL}search.php?s=${searchBar.value.trim()}`;
+    let standardSearch = fetch(url)
+    .then(result => {return result.json()})
+    .then(json => {return json.meals;})
+    .catch(error => {
+        console.log("Error: " + error);
+    });
+    url = `${baseURL}filter.php?i=${searchBar.value.trim()}`;
+    let ingredientSearch = fetch(url)
+    .then(result => {return result.json()})
+    .then(json => {return json.meals || [];})
+    .catch(error => {
+        console.log("Error: " + error);
+        return [];
+    });
+    const results = await Promise.all([standardSearch, ingredientSearch]);
+    /*
+        In the line below I am taking all results from the flattened list and turning them 
+        into key value pairs (the mealID and the meal mealect) using the .map function 
+        and storing them in a new Map to remove all duplicates effieciently
 
-            I am then storing all of that back into a list and returning it
-        */
-        return Array.from(
-            new Map(results.flat().map(meal => [meal.idMeal, meal])).values()
-        );
+        I am then storing all of that back into a list and returning it
+    */
+    return Array.from(
+        new Map(results.flat().map(meal => [meal.idMeal, meal])).values()
+    );
 }
 /*
     This function gets a list of all active checkboxes in the form and loops through each of them creating future promises that are stored

@@ -12,34 +12,14 @@ function getItem(){
 }
 
 function displayMeal(meal){
-    let body = document.querySelector("body");
-    body.innerHTML += `
-    <h1>${meal.strMeal}</h1>
-    <div>
-        <p>${meal.strArea}</p>
-        <a href="index.html">Home</a>
-    </div>
-    <main>
-        <section>
-            <ul id="ingredients">
-                <!-- strMeasure[i] + " of " + strIngredients[i] indexed at 1 -->
-                
-            </ul>
-            <!-- strInstructions -->
-            <p id="instructions">
-               Fry the finely chopped onions and minced meat in oil.
-               Add the salt and pepper. 
-               Grease a round baking tray and put a layer of pastry in it. Cover with a thin layer 
-               of filling and cover this with another layer of filo pastry which must be well coated in oil. 
-               Put another layer of filling and cover with pastry. When you have five or six layers, cover with filo pastry, 
-               bake at 200ºC/392ºF for half an hour and cut in quarters and serve."
-            </p>
-        </section>
-        <img src="https://www.themealdb.com/images/media/meals/tkxquw1628771028.jpg" alt="empty">
-    </main>
-    `;
-    let ul = document.querySelector("#ingredients");
     console.log(meal);
+    let mealName = document.querySelector("h1");
+    let country = document.querySelector("#country-origin");
+    let ul = document.querySelector("#ingredients");
+    let instructions = document.querySelector("#instructions");
+    let mealImg = document.querySelector("img");
+    mealName.textContent = meal.strMeal;
+    country.textContent = meal.strArea;
     for(let i = 1; i <= 20; i++){
         if(meal[`strMeasure${i}`].trim() === ""){
             break;
@@ -48,9 +28,9 @@ function displayMeal(meal){
         li.textContent = meal[`strIngredient${i}`] +": "+ meal[`strMeasure${i}`];
         ul.appendChild(li);
     }
-    let instructions = document.querySelector("#instructions");
     instructions.textContent = meal.strInstructions;
-    
+    mealImg.setAttribute("src", meal.strMealThumb);
+    mealImg.setAttribute("alt", meal.strMeal);
 }
 
 getItem();
