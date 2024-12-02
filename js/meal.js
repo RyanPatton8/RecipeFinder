@@ -44,25 +44,32 @@ printBtn.onclick = function(){
     let ingredients = document.querySelector("#ingredients");
     let instructions = document.querySelector("#instructions");
     let homebtn = document.querySelector("a");
+    //Store their current formatting
+    let h1FontSize = h1.style.fontSize;
+    let countryFontSize = country.style.fontSize;
+    let mainFlexDir = main.style.flexDirection;
+    let imgWidth = img.style.width;
+    let ingredientFontSize = ingredients.style.fontSize;
+    let instructionFontSize = instructions.style.fontSize;
     //reformat for pdf
     h1.style.fontSize = "30px";
     country.style.fontSize = "20px";
     main.style.flexDirection = "column-reverse";
     img.style.width = "200px";
-    printBtn.style.display = "none";
     ingredients.style.fontSize = "13px";
     instructions.style.fontSize = "15px";
-    document.querySelector("#flex-holder").appendChild(img);
+    printBtn.style.display = "none";
     homebtn.style.display = "none";
+    document.querySelector("#flex-holder").appendChild(img);
     //open pdf screen for print or save
     print();
     //fix formatting
-    h1.style.fontSize = "3em";
-    country.style.fontSize = "1.7em";
-    main.style.flexDirection = "row";
-    img.style.width = "auto";
-    ingredients.style.fontSize = "1.2rem";
-    instructions.style.fontSize = "1.2rem";
+    h1.style.fontSize = h1FontSize;
+    country.style.fontSize = countryFontSize;
+    main.style.flexDirection = mainFlexDir;
+    img.style.width = imgWidth;
+    ingredients.style.fontSize = ingredientFontSize;
+    instructions.style.fontSize = instructionFontSize;
     printBtn.style.display = "block";
     homebtn.style.display = "block";
     imgContainer.appendChild(img);
